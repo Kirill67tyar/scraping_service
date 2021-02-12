@@ -2,25 +2,25 @@
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
 
-  <title>The HTML5 Herald</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
+    <title>The HTML5 Herald</title>
+    <meta name="description" content="The HTML5 Herald">
+    <meta name="author" content="SitePoint">
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
 
 </head>
 
 <body>
-  <script src="js/scripts.js"></script>
+<script src="js/scripts.js"></script>
 
-<h1>{{ch}}</h1>
-  <hr>
-<h1>{{today}}</h1>
-  <hr>
-<h1>{{day_and_time}}</h1>
-  <hr>
-<h1>{{td}}</h1>
+
+<ul>
+    {% for object in object_list %}
+    <li>{{object}}</li>
+    <hr>
+    {% endfor %}
+</ul>
 </body>
 </html>
