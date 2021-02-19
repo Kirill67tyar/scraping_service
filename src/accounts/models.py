@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import (AbstractBaseUser, BaseUserManager)
 from django.contrib.auth.models import UserManager
+
 from django.db import models
 from scraping.models import City, Language
 

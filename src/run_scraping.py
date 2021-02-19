@@ -15,51 +15,106 @@ import django
 django.setup()
 # ------------------------------------------------------- Запуск Django в не самого проекта
 import codecs
-from scraping.parsers import *
-from scraping.models import City, Language, Vacancy, Error
-from scraping.utils import get_object_or_null
+import asyncio
 from django.shortcuts import get_object_or_404
 from django.db import DatabaseError
 from django.contrib.auth import get_user_model
+from scraping.parsers import *
+from scraping.models import City, Language, Vacancy, Error, Url
+from scraping.utils import get_object_or_null
+
 
 
 
 parsers = (
-            (work, 'https://www.work.ua/ru/jobs-kyiv-python/'),
-            (rabota, 'https://rabota.ua/zapros/python/%d0%ba%d0%b8%d0%b5%d0%b2'),
-            (job_dou, 'https://jobs.dou.ua/vacancies/?city=%D0%9A%D0%B8%D0%B5%D0%B2&category=Python'),
-            (djinni, 'https://djinni.co/jobs/location-kyiv/?primary-keyword=Python'),
+            (work, 'work'),
+            (rabota, 'rabota'),
+            (job_dou, 'dou'),
+            (djinni, 'djinni'),
            )
 
 User = get_user_model()
 
+jobs, errors = [], []
 
 def get_settings():
     qs = User.objects.filter(mailing=True).values()
     settings_lst = set((q['city_id'], q['language_id']) for q in qs)
     return settings_lst
 
-q = get_settings()
-print(q)
 
-city = get_object_or_null(model=City, slug='kiev')
-language = get_object_or_null(model=Language, slug='python')
-jobs, errors = [], []
+def get_url(_settings):
+    qs = Url.objects.all().values()
+    url_dict = {(q['city_id'], q['language_id']): q['url_data'] for q in qs}
+    urls = []
+    for pair in _settings:
+        tmp = {}
+        tmp['city'] = pair[0]
+        tmp['language'] = pair[-1]
+        tmp['url_data'] = url_dict.get(pair, {})
+        urls.append(tmp)
+    return urls
 
-for func, url in parsers:
-    ## не мой вариант
-    j, e = func(url)
-    jobs.extend(j)
-    errors.extend(e)
 
-    # мой вариант
-    # jobs.extend(pair[0](pair[-1])[0])
-    # errors.extend(pair[0](pair[-1])[-1])
+# await запускает функцию, и при этом происходт переключение на другое выполнение,
+# тем самым достигается распараллеливание, и как следствие - увеличение скорости работы
+# но перед этим необходимо пометить, что наша функция и потавить ключевое слово async перед
+# определением фукции.
+# executor - исполнитель (implementer, performer)
+async def main(value):
+    func, url, city, language = value
+    job, err = await loop.run_in_executor(None, func, url, city, language)
+    jobs.extend(job)
+    errors.extend(err)
+
+
+
+
+_settings = get_settings()
+url_list = get_url(_settings)
+
+
+
+# import time
+# start = time.time()
+
+# ---------------------------------------------------------------------    Асинхронный способ выполнения
+# for i in range(10):
+loop = asyncio.get_event_loop() #  сздаем loop для асинхронного программирования
+tmp_tasks = [(func, data['url_data'].get(key, None), data['city'], data['language'])
+                 for data in url_list
+                 for func, key in parsers]
+
+## когда wait вызывается - он регулирует переключение интерпритатора, для той  или иной таски
+tasks = asyncio.wait([loop.create_task(main(f)) for f in tmp_tasks])
+loop.run_until_complete(tasks)
+loop.close()
+# ---------------------------------------------------------------------    Асинхронный способ выполнения
+
+            #                   OR
+
+# # =====================================================================    Неасинхронный способ выполнения
+# for i in range(10):
+#     for data in url_list:
+#         for func, key in parsers:
+#             url = data['url_data'].get(key, None)
+#             if url:
+#                 # вот эта строчка - блокирующий вызов. Самый узкий проход нашего кода, бутылочное горлышко
+#                 # весь код не может быть выполнен, пока не пройдут эти функции
+#                 # поэтому мы здесь и используем аинхронный подход
+#                 j, e = func(url, city=data['city'], language=data['language'])
+#                 jobs.extend(j)
+#                 errors.extend(e)
+# # =====================================================================    Неасинхронный способ выполнения
+
+# print((time.time() - start) / 10)
+# print(*jobs,len(jobs), sep='\n')
+# print(errors)
 
 
 for vacancy in jobs:
 
-    v = Vacancy(**vacancy, city=city, language=language)
+    v = Vacancy(**vacancy)
     try:
         v.save()
     except DatabaseError:

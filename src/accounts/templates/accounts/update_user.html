@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block content %}
+
+
+<figure class="text-center">
+    <div class="row">
+        <div class="col">
+            <h2 class="my-3">Настройки</h2>
+        </div>
+    </div>
+</figure>
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <form action="." method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{form.as_p}}
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--<div class="row">-->
+<!--    <div class="col-md-6 mx-auto">-->
+<!--        <form action="{# url 'accounts:delete' #}" method="GET">-->
+
+<!--            <div class="form-group">-->
+
+<!--                <button type="submit" class="btn btn-danger my-3">Удалить пользователя</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="box">
+            <a class="btn btn-danger" href="#popup1">Удалить</a>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------------------------------->
+<div id="popup1" class="overlay">
+    <div class="popup">
+        <h2>Вы действительно хотите удалить данные с сайта?</h2>
+<!--        <a class="close" href="#">&times;</a>-->
+        <div class="content">
+
+
+            <form action="{# url 'accounts:delete' #}" method="POST">
+                {% csrf_token %}
+                <div class="d-grid gap-6">
+                    <button type="submit" class="btn btn-danger my-3">Да</button>
+                </div>
+            </form>
+
+
+            <div class="d-grid gap-6">
+
+                <a class="close btn btn-primary" href="#">Нет</a>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------------------------------->
+{% endblock %}

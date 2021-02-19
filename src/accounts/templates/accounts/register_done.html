@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация прошла успешно{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        WOW
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Приветствую Вас {{new_user}}. Поздравляем, Ваша регистрация прошла успешно!</h5>
+        <p class="card-text">Предлагаем Вам пройти на страницу, чтобы авторизаваться</p>
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary">Авторизация</a>
+    </div>
+    <div class="card-footer text-muted">
+
+    </div>
+</div>
+{% endblock %}

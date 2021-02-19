@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Vacancy list{% endblock %}
+
+{% block content %}
+
+
+
+<!--<div class="row">-->
+<!--    <div class="col-md-7 mx-auto">-->
+<div class="row justify-content-md-center">
+    <p class="h4">{{report}}</p>
+</div>
+<!--</div>-->
+
+
+
+<br>
+
+<!-------------- Pagination --------------->
+{% include '_inc/pagination.html' %}
+<!-------------- Pagination --------------->
+
+<br>
+{% for obj in page_obj %}
+<div class="card my-3">
+    <div class="card-header">
+        <h5 class="card-title"><a href="{{obj.url}}" target="_blank">{{obj.title}}</a></h5>
+    </div>
+    <div class="card-body">
+        <p class="lead">
+            <small>{{obj.company}}</small>
+        </p>
+
+        <p class="card-text">{{obj.description|truncatewords:60}}</p>
+
+        <small><p class="card-text">{{obj.city.name}} | {{obj.language.name}} |
+            {{obj.timestamp|date:"(l) d-m-Y"}}</p></small>
+
+    </div>
+</div>
+
+
+{% endfor %}
+
+<!-------------- Pagination --------------->
+{% include '_inc/pagination.html' %}
+<!-------------- Pagination --------------->
+
+
+{% include '_inc/form.html' %}
+<br>
+{% endblock %}

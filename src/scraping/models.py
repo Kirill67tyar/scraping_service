@@ -75,6 +75,7 @@ class Vacancy(Model):
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
+        ordering = '-timestamp',
 
 
 
@@ -86,7 +87,7 @@ class Error(Model):
 
 
     def __str__(self):
-        return self.timestamp
+        return str(self.timestamp)
 
     class Meta:
         verbose_name = 'Ошибка'
@@ -103,13 +104,36 @@ class Url(Model):
     class Meta:
 
         unique_together = ('city', 'language',)
-        # unique_together - означает, что мы не сможем для двух экземпляром один ко многим
-        # сделать больше чем одна строка.
+        # unique_together - означает, что мы не сможем для двух записей в столбике один ко многим
+        # сделать больше чем одну строку.
         # Допустим запись в таблицу url ссылается Киев для city и python для language
         # благодаря unique_together мы можем сделать только одну запись для сочетания Киев и python
 #         Для каждой записи уникальное сочетание заданных полей, если вкратце.
 
 
 
+#                   Forms / ModelForms
 
+# src:
+# https://docs.djangoproject.com/en/3.1/topics/forms/modelforms/
+# https://docs.djangoproject.com/en/3.1/ref/forms/models/
 
+# Как проверить юзера еще на этапе валидации?
+# Каждая форма, когда вызывается - содержит метод clean()
+
+# Очень важно: когда мы редактируем профиль, то очень не желательно в url передавать id пользователя
+# как же передать в форму instance? И как вообще узнать какой профиль нужно редактировать?]
+# Очень просто - request.user   даст нам представление о том, чей профиль нужно редактировать
+# django сам определяет какой юзер к нам заходит
+# если юзер не авторизирован, то request.user будет AnonymousUser (экземпляр специального класса AnonymousUser)
+# проверить авторизирован он или нет можно request.user.is_authenticated - выдаст булевое значение
+# приредактировании профиля имеет смысл проверить на авторизацию юзера, в общем
+# смотри accounts.views update_view
+# при update если мы используем обычную Form, то нужно сохранять изменения вручную
+# data = form.cleaned_data >>> user.city = data['city'] >>> user.language = data['language']
+# При ModelForm достаточно закинуть в форму instance и data, где instance - объект модели до изменений,
+# а data это request.POST (или request.data в REST API)
+
+# Кстати, на том, что такое request, django в консоли выдает <WSGIRequest: GET '/job-search/'>
+# Погугли что такое WSGI
+# Посмотри, что печатает в консоли в http://127.0.0.1:8000/job-search/experiment/

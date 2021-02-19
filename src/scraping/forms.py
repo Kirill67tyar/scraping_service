@@ -1,14 +1,16 @@
 from django import forms
 from scraping.models import City, Language, Vacancy
 
-
+"""
+class="form-select form-select-lg mb-3"
+"""
 class SearchForm(forms.Form):
 
     city = forms.ModelChoiceField(
         queryset=City.objects.all(),
         to_field_name='slug',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control',}),
+        widget=forms.Select(attrs={'class': 'form-select form-select-lg mb-3',}),
         label='Город'
     )
 
@@ -16,8 +18,8 @@ class SearchForm(forms.Form):
         queryset=Language.objects.all(),
         to_field_name='slug',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control',}),
-        label='Язык'
+        widget=forms.Select(attrs={'class': 'form-select form-select-lg mb-3',}),
+        label='Язык программирования'
     )
 
 

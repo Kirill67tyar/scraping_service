@@ -19,11 +19,11 @@ from django.urls import (path, include,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', include('scraping.urls', namespace='scraping')),
-    path('account/', include('accounts.urls', namespace='accounts')),
+    path('job-search/', include('scraping.urls', namespace='scraping')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
 ]
 
-# lesson start 5-17 (57)
+# lesson start 7-5 (68)
 
 
 

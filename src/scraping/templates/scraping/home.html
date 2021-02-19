@@ -4,51 +4,6 @@
 
 {% block content %}
 
-<!--------------result report------------->
-{% if report %}
-
-<!--<div class="row">-->
-<!--    <div class="col-md-7 mx-auto">-->
-    <div class="row justify-content-md-center">
-        <p class="h4">{{report}}</p>
-    </div>
-<!--</div>-->
-{% endif %}
-<!-------------result report-------------->
-<br>
-
-<!-------------- Pagination --------------->
-{% include '_inc/pagination.html' %}
-<!-------------- Pagination --------------->
-{% if city or language %}
-<a href="{% url 'scraping:vacancy' %}">
-    <button type="button" class="btn btn-outline-primary">Назад</button>
-</a>
-{% endif %}
-<br>
-{% for obj in page_obj %}
-<div class="card my-3">
-    <div class="card-header">
-        <h5 class="card-title"><a href="{{obj.url}}" target="_blank">{{obj.title}}</a></h5>
-    </div>
-    <div class="card-body">
-        <p class="lead"><small>{{obj.company}}</small></p>
-
-        <p class="card-text">{{obj.description|truncatewords:60}}</p>
-
-        <small><p class="card-text">{{obj.city.name}} | {{obj.language.name}} |
-            {{obj.timestamp|date:"(l) d-m-Y"}}</p></small>
-
-    </div>
-</div>
-
-
-{% endfor %}
-
-<!-------------- Pagination --------------->
-{% include '_inc/pagination.html' %}
-<!-------------- Pagination --------------->
-
 
 <!-------------------POST запрос-------------------->
 <!--<form action="." method="POST">{#csrf_token#}-->
@@ -74,29 +29,36 @@
 <!--<br>-->
 <!--С формой Django -->
 
+
+<figure class="text-center">
+    <div class="row">
+        <div class="col">
+            <h2 class="my-3">Сервис по сбору и рассылке вакансий</h2>
+        </div>
+    </div>
+</figure>
+
+
 <div class="row">
+    <div class="col-md-8 mx-auto">
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <p class="my-2">Для просмотра новых вакансий, выберите город и/или язык программирования</p>
+            </blockquote>
+        </figure>
+    </div>
     <div class="col-md-6 mx-auto">
-        <form action="." method="GET">
+        <form action="{% url 'scraping:vacancy_list' %}" method="GET">
             <div class="form-group">
                 {{form.as_p}}
-                <button type="submit" class="btn btn-primary">Искать</button>
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-2x" aria-hidden="true"></i>&nbsp;</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<!--------------------GET запрос-------------------->
-
-<!--<form action="https://www.google.com/search" method="get">-->
-<!--    <label for="search">Поиск в google, ша</label><br>-->
-<!--    <input type="text" id="search" name="q"><br>-->
-<!--    <input type="submit" value="Поиск">-->
-<!--</form>-->
-<!--<br><br>-->
-<!--<form action="." method="GET">-->
-<!--    {form_experiment.as_p}-->
-<!--    <input type="submit" value="Тыц">-->
-<!--</form>-->
 
 {% endblock %}
 
