@@ -133,6 +133,12 @@ class Url(Model):
 # data = form.cleaned_data >>> user.city = data['city'] >>> user.language = data['language']
 # При ModelForm достаточно закинуть в форму instance и data, где instance - объект модели до изменений,
 # а data это request.POST (или request.data в REST API)
+# При роботе с queryset всегда старайся вызывать метод values(). Работай с ним как можно больше - он очень крутой
+# особенно, если надо проитерировать QuerySet
+# В метод values можно передавать параметры, не забывай это. values() преобразует поля ForeigKey как
+# <name_field>_id (city_id). А если передать в values() параметр, values('city') то будет ключ city, а
+# не city_id
+
 
 # Кстати, на том, что такое request, django в консоли выдает <WSGIRequest: GET '/job-search/'>
 # Погугли что такое WSGI
