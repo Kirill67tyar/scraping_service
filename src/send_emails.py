@@ -1,5 +1,6 @@
 # ------------------------------------------------------- Запуск Django в не самого проекта
 import os, sys
+from datetime import date, timedelta
 import django
 
 proj = os.path.dirname(os.path.abspath('manage.py'))    # устанавливаем абсолютный путь
@@ -13,10 +14,20 @@ django.setup()
 # ------------------------------------------------------- Запуск Django в не самого проекта
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
-from scraping.models import Vacancy
+from scraping.models import Vacancy, Error, Url, City, Language
+from scraping.utils import get_object_or_null
+from scraping_service.settings import EMAIL_HOST_USER
+
+
+today = date.today()
+subject = f'Рассылка вакансий за {today}'
+text_content = 'Вакансии:'
+from_email = EMAIL_HOST_USER
+admin_user = EMAIL_HOST_USER
+empty = f'<h4>На сегодняшний день ({today}) вакансий нет.</h4>'
+fresh_date = today - timedelta(days=10)
 
 User = get_user_model()
-
 qs = User.objects.filter(mailing=True).values('city', 'language', 'email')
 users_dict = {}
 # Держи в голове, что city и language - необязательные поля, и могут быть None
@@ -27,17 +38,22 @@ for data in qs:
     language = data.get('language')
     email = data['email']
     key = (city, language)
-    print(key)
     users_dict.setdefault(key, [])
     users_dict[(city, language)].append(email)
 # print(users_dict)
 
+
+
+# это не совсем хороший алгоритм. Мы коллкуционируем записи по ключу и значению.
+# Допустим есть два пользователя, у одного city_id и language_id равны 3 и 1. У другого 2 и 5
+# Нам нужны вакансии, привязанные к городу и языку 3-1 и 2-5. Но этот алгоритм
+# будет находить нам вакансии помимо тех что нужно также и 3-5 и 2-1.
 if users_dict:
     params = {'city_id__in': [], 'language_id__in': [],}
     for pair in users_dict.keys():
         params['city_id__in'].append(pair[0])
         params['language_id__in'].append(pair[-1])
-    qs = Vacancy.objects.filter(**params).values()[:10]
+    qs = Vacancy.objects.filter(**params, timestamp=today).values()
 
     vacancies = {}
     for v in qs:
@@ -46,25 +62,94 @@ if users_dict:
         key = (city, language,)
         vacancies.setdefault(key, [])
         vacancies[key].append(v)
-    print(*vacancies[(3,1)],sep='\n')
+    # print(*vacancies[(3,1)],sep='\n')
 
     for key, emails in users_dict.items():
         rows = vacancies.get(key, [])
         html = ''
-        for row in rows:
-            html += f'<h5><a href="{ row["url"] }" target="_blank">{ row["title"] }</a></h5>'
-            html += f'<p>{row["company"]}<\p>'
-            html += f'<p>{str(row["timestamp"])}</p><br><hr>'
+        if rows:
+            for row in rows:
+                html += f'<h3><a href="{ row["url"] }" target="_blank">{ row["title"] }</a></h3>'
+                html += f'<p>{row["company"]}</p>'
+                html += f'<p>{str(row["timestamp"])}</p><br><hr>'
+        html_content = html if html else empty
+        for email in emails:
+            to = email
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+
+error = get_object_or_null(Error, datestamp=today)
+subject = text_content = html_content = ''
+to = admin_user
+# ---------------------------------------------------------- Ищем ошибки скрапинга (START)
+if error:
+    data = error.data['errors']
+    for i, err in enumerate(data, start=1):
+        html_content += f'<p>{i}) url: {err.get("url")}</p>'
+        html_content += f'<p>cause: {err.get("cause")}</p>'
+        html_content += f'<p>status code: {err.get("status_code")}</p>'
+        html_content += f'<p>{error.timestamp}</p>'
+        html_content += f'<p>{"-"*50}</p>'
+    subject += f'Ошибки скрапинга'
+    text_content += 'Ошибки скрапинга'
+# ---------------------------------------------------------- Ищем ошибки скрапинга (FINISH)
+
+# ========================================================== Ищем пары город-язык к которым нет urls (START)
+qs = Url.objects.all().values('city', 'language')
+urls_dict = {(data['city'], data['language']): True for data in qs}
+
+
+users_keys = set(users_dict.keys())
+urls_keys = set(urls_dict.keys())
+keys_without_urls = list(users_keys.difference(urls_keys))
+
+# *** Эти две строчки, для того, чтобы отображать название городов в письме ***
+city_names = City.objects.filter(pk__in=[i[0] for i in keys_without_urls]).values('name', 'pk')
+language_names = Language.objects.filter(pk__in=[i[-1] for i in keys_without_urls]).values('name', 'pk')
+# *** ***
+
+url_errors = '<hr><br><p>Для следующих городов и языков программирования отсутствуют urls qwqw</p>'
+if keys_without_urls:
+    subject += f' Отстутсвующие urls {today}'
+    text_content += 'Отсутствующие urls'
+    for city, language in keys_without_urls:
+        name_city = list(filter(lambda x: x['pk'] == city,  city_names))[0]['name']
+        name_language = list(filter(lambda x: x['pk'] == language, language_names))[0]['name']
+        url_errors += f'<p>город: {name_city}, яп: {name_language} | ({city}, {language})</p>'
+    html_content += url_errors
+# ========================================================== Ищем пары город-язык к которым нет urls (FINISH)
+
+# ------------ Посылаем письмо админу ------------
+if subject:
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+# with open('to_admin.html', 'w') as p:
+#     p.write(html_content)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 """
-<h5 class="card-title"><a href="{{obj.url}}" target="_blank">{{obj.title}}</a></h5>
-"""
-
-
 subject, from_email, to = 'hello', 'from@example.com', 'to@example.com'
 text_content = 'This is an important message.'
 html_content = '<p>This is an <strong>important</strong> message.</p>'
 msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
 msg.attach_alternative(html_content, "text/html")
 msg.send()
+"""

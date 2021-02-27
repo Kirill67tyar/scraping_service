@@ -47,143 +47,147 @@ def get_jobs_erros_resp(url):
 
 
 def work(url, city, language):
-    if url:
-        jobs, errors, resp = get_jobs_erros_resp(url)
-        domain = 'https://www.work.ua'
-        if resp.status_code == 200:
-            soup = BS(resp.content, 'html.parser')
-            main_div = soup.find('div', id='pjax-job-list')
-            if main_div:
-                div_list = main_div.find_all('div', attrs={'class': 'job-link'})
-                for div in div_list:
-                    title = div.find('h2')
-                    href = title.find('a')
-                    content = div.p.text.strip()
-                    company = 'Unknown'
-                    if div.img:
-                        company = div.img['alt']
-                    title = title.a.string.strip()
-                    href = domain + href['href']
-                    record_jobs(jobs, title, href, content, company, city, language)
-            else:
-                cause = 'Div does not exist'
-                record_errors(url=url, cause=cause, resp=resp, errors=errors, )
+    # if url:
+    jobs, errors, resp = get_jobs_erros_resp(url)
+    domain = 'https://www.work.ua'
+    if resp.status_code == 200:
+        soup = BS(resp.content, 'html.parser')
+        main_div = soup.find('div', id='pjax-job-list')
+        if main_div:
+            div_list = main_div.find_all('div', attrs={'class': 'job-link'})
+            for div in div_list:
+                title = div.find('h2')
+                href = title.find('a')
+                content = div.p.text.strip()
+                company = 'Unknown'
+                if div.img:
+                    company = div.img['alt']
+                title = title.a.string.strip()
+                href = domain + href['href']
+                record_jobs(jobs, title, href, content, company, city, language)
         else:
-            cause = 'Page does not response'
-            record_errors(url=url, cause=cause, resp=resp, errors=errors)
-        return jobs, errors
+            cause = 'Div does not exist'
+            record_errors(url=url, cause=cause, resp=resp, errors=errors, )
+    else:
+        cause = 'Page does not response'
+        record_errors(url=url, cause=cause, resp=resp, errors=errors)
+    return jobs, errors
 
 
 
 def rabota(url, city, language):
-    if url:
-        jobs, errors, resp = get_jobs_erros_resp(url)
-        domain = 'https://rabota.ua'
-        if resp.status_code == 200:
-            soup = BS(resp.content, 'html.parser')
-            new_jobs = soup.find('div', attrs={'class': 'f-vacancylist-newnotfound'})
-            if not new_jobs:
-                table = soup.find('table', id='ctl00_content_vacancyList_gridList')
-                if table:
-                    tr_list = table.find_all('tr', attrs={'id': True}) # там id указаны как id="8360908" (любое другое число)
-                    for tr in tr_list:
-                        div = tr.find('div', attrs={'class': 'card-body',}) # позволяет нам отсеить рекламные банеры
-                        if div:
-                            title = div.find('h2', attrs={'class': 'card-title'}) # не мой вариант
-                            # title = div.h2.text.strip() # мой вариант
-                            href = title.a['href']
-                            # print(domain + href)
-                            content = div.find('div', attrs={'class': 'card-description',}).text.strip()
-                            # print(content,end='\n\n\n')
-                            company = 'Unknown'
-                            p = div.find('p', attrs={'class': 'company-name'})
-                            if p:
-                                company = p.a.text
-                            title = title.text.strip()
-                            href = domain + href
-                            record_jobs(jobs, title, href, content, company, city, language)
-                        else:
-                            cause = 'Div does not exist'
-                            record_errors(url=url, cause=cause, resp=resp, errors=errors)
-
-                else:
-                    cause = 'Table does not exist'
-                    record_errors(url=url, cause=cause, resp=resp, errors=errors)
+    # if url:
+    jobs, errors, resp = get_jobs_erros_resp(url)
+    domain = 'https://rabota.ua'
+    if resp.status_code == 200:
+        soup = BS(resp.content, 'html.parser')
+        new_jobs = soup.find('div', attrs={'class': 'f-vacancylist-newnotfound'})
+        if not new_jobs:
+            table = soup.find('table', id='ctl00_content_vacancyList_gridList')
+            if table:
+                tr_list = table.find_all('tr', attrs={'id': True}) # там id указаны как id="8360908" (любое другое число)
+                for tr in tr_list:
+                    div = tr.find('div', attrs={'class': 'card-body',}) # позволяет нам отсеить рекламные банеры
+                    if div:
+                        title = div.find('h2', attrs={'class': 'card-title'}) # не мой вариант
+                        # title = div.h2.text.strip() # мой вариант
+                        href = title.a['href']
+                        # print(domain + href)
+                        content = div.find('div', attrs={'class': 'card-description',}).text.strip()
+                        # print(content,end='\n\n\n')
+                        company = 'Unknown'
+                        p = div.find('p', attrs={'class': 'company-name'})
+                        if p:
+                            company = p.a.text
+                        title = title.text.strip()
+                        href = domain + href
+                        record_jobs(jobs, title, href, content, company, city, language)
+                    else:
+                        cause = 'Div does not exist'
+                        record_errors(url=url, cause=cause, resp=resp, errors=errors)
 
             else:
-                cause = 'Page is empty'
+                cause = 'Table does not exist'
                 record_errors(url=url, cause=cause, resp=resp, errors=errors)
 
         else:
-            cause = 'Page does not response'
+            cause = 'Page is empty'
             record_errors(url=url, cause=cause, resp=resp, errors=errors)
-        return jobs, errors
+
+    else:
+        cause = 'Page does not response'
+        record_errors(url=url, cause=cause, resp=resp, errors=errors)
+    return jobs, errors
+    # else:
+    #     return [], []
 
 
 
 def job_dou(url, city, language):
-    if url:
-        jobs, errors, resp = get_jobs_erros_resp(url)
-        if resp.status_code == 200:
-            soup = BS(resp.content, 'html.parser')
-            main_div = soup.find('div', id='vacancyListId')
-            if main_div:
-                # ul = main_div.find('ul', attrs={'class': 'lt'})
-                li_list = main_div.find_all('li', attrs={'class':'l-vacancy',})
-                for li in li_list:
+    # if url:
+    jobs, errors, resp = get_jobs_erros_resp(url)
+    if resp.status_code == 200:
+        soup = BS(resp.content, 'html.parser')
+        main_div = soup.find('div', id='vacancyListId')
+        if main_div:
+            # ul = main_div.find('ul', attrs={'class': 'lt'})
+            li_list = main_div.find_all('li', attrs={'class':'l-vacancy',})
+            for li in li_list:
 
-                    if '__hot' not in li['class']:    # li['class'] = ['l-vacancy', '__hot']/['l-vacancy']
-                        title = li.find('a', attrs={'class': 'vt'})
-                        href = title['href']
-                        content = li.find('div', attrs={'class': 'sh-info'}).text.strip()
-                        company = 'Unknown'
-                        comp = li.find('a', attrs={'class': 'company'}).text.strip()
-                        if comp:
-                            company = comp
-                        title = title.text.strip()
-                        record_jobs(jobs, title, href, content, company, city, language)
-            else:
-                cause = 'Div does not exist'
-                record_errors(url=url, cause=cause, resp=resp, errors=errors)
+                if '__hot' not in li['class']:    # li['class'] = ['l-vacancy', '__hot']/['l-vacancy']
+                    title = li.find('a', attrs={'class': 'vt'})
+                    href = title['href']
+                    content = li.find('div', attrs={'class': 'sh-info'}).text.strip()
+                    company = 'Unknown'
+                    comp = li.find('a', attrs={'class': 'company'}).text.strip()
+                    if comp:
+                        company = comp
+                    title = title.text.strip()
+                    record_jobs(jobs, title, href, content, company, city, language)
         else:
-            cause = 'Page does not response'
+            cause = 'Div does not exist'
             record_errors(url=url, cause=cause, resp=resp, errors=errors)
-        return jobs, errors
+    else:
+        cause = 'Page does not response'
+        record_errors(url=url, cause=cause, resp=resp, errors=errors)
+    return jobs, errors
+    # else:
+    #     return [], []
 
 
 
 def djinni(url, city, language):
-    if url:
-        jobs, errors, resp = get_jobs_erros_resp(url)
-        domain = 'https://djinni.co'
-        if resp.status_code == 200:
-            soup = BS(resp.content, 'html.parser')
-            main_ul = soup.find('ul', attrs={'class': 'list-jobs',})
-            # здесь мы ищем 'list-jobs' а не "list-unstyled list-jobs"
-            # это связано с тем что list-unstyled с высокой вероятностью поменяется, list-jobs - более стабильна
-            # это одна из фундаметнальных вещей работы с парсингом - пытаться взять или id тега или
-            # минимум стабильной инфы. Похоже на бритву оккама - минимум, но достаточной инфы
-            if main_ul:
-                li_list = main_ul.find_all('li', attrs={'class': 'list-jobs__item'})
-                for li in li_list:
-                    title_href = li.find('div', attrs={'class': 'list-jobs__title'})
-                    title = title_href.text.strip()
-                    if '\n' in title:
-                        title = title.split('\n')[0]
-                    href = domain + title_href.a['href']
-                    content = li.find('div', attrs={'class': 'list-jobs__description',}).text.strip()
-                    company = 'Unknown'
-                    detail_info = li.find('div', attrs={'class': 'list-jobs__details__info'})
-                    if detail_info:
-                        company = detail_info.find('a', attrs={'style': True,}).text.strip()
-                    record_jobs(jobs, title, href, content, company, city, language)
-            else:
-                cause = 'Ul does not exist'
-                record_errors(url=url, cause=cause, resp=resp, errors=errors)
+    jobs, errors, resp = get_jobs_erros_resp(url)
+    domain = 'https://djinni.co'
+    if resp.status_code == 200:
+        soup = BS(resp.content, 'html.parser')
+        main_ul = soup.find('ul', attrs={'class': 'list-jobs',})
+        # здесь мы ищем 'list-jobs' а не "list-unstyled list-jobs"
+        # это связано с тем что list-unstyled с высокой вероятностью поменяется, list-jobs - более стабильна
+        # это одна из фундаметнальных вещей работы с парсингом - пытаться взять или id тега или
+        # минимум стабильной инфы. Похоже на бритву оккама - минимум, но достаточной инфы
+        if main_ul:
+            li_list = main_ul.find_all('li', attrs={'class': 'list-jobs__item'})
+            for li in li_list:
+                title_href = li.find('div', attrs={'class': 'list-jobs__title'})
+                title = title_href.text.strip()
+                if '\n' in title:
+                    title = title.split('\n')[0]
+                href = domain + title_href.a['href']
+                content = li.find('div', attrs={'class': 'list-jobs__description',}).text.strip()
+                company = 'Unknown'
+                detail_info = li.find('div', attrs={'class': 'list-jobs__details__info'})
+                if detail_info:
+                    company = detail_info.find('a', attrs={'style': True,}).text.strip()
+                record_jobs(jobs, title, href, content, company, city, language)
         else:
-            cause = 'Page does not response'
+            cause = 'Ul does not exist'
             record_errors(url=url, cause=cause, resp=resp, errors=errors)
-        return jobs, errors
+    else:
+        cause = 'Page does not response'
+        record_errors(url=url, cause=cause, resp=resp, errors=errors)
+    return jobs, errors
+
 
 
 

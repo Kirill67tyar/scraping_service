@@ -16,6 +16,7 @@ django.setup()
 # ------------------------------------------------------- Запуск Django в не самого проекта
 import codecs
 import asyncio
+from datetime import date
 from django.shortcuts import get_object_or_404
 from django.db import DatabaseError
 from django.contrib.auth import get_user_model
@@ -48,11 +49,12 @@ def get_url(_settings):
     url_dict = {(q['city_id'], q['language_id']): q['url_data'] for q in qs}
     urls = []
     for pair in _settings:
-        tmp = {}
-        tmp['city'] = pair[0]
-        tmp['language'] = pair[-1]
-        tmp['url_data'] = url_dict.get(pair, {})
-        urls.append(tmp)
+        if pair in url_dict:
+            tmp = {}
+            tmp['city'] = pair[0]
+            tmp['language'] = pair[-1]
+            tmp['url_data'] = url_dict.get(pair, {})
+            urls.append(tmp)
     return urls
 
 
@@ -72,6 +74,7 @@ async def main(value):
 
 _settings = get_settings()
 url_list = get_url(_settings)
+# print(*url_list,sep='\n')
 
 
 
@@ -120,10 +123,20 @@ for vacancy in jobs:
     except DatabaseError:
         pass
 
+errors_exp = [{
+        'url': 'https://www.amalgama-lab.com/songs/m/misfits/mars_attacks.html',
+        'cause': 'HZ',
+        'status_code': 200,}]
 
+# if errors_exp:
 if errors:
-    err = Error(data=errors).save()
+    err = get_object_or_null(Error, datestamp=date.today())
+    if err:
+        err.data['errors'].extend(errors)
+        err.save()
 
+    else:
+        err = Error(data={'errors': errors, 'feedback': [],}).save()
 
 
 # ------------------------------------------------------------------

@@ -1,3 +1,5 @@
+from django.db.models.query import QuerySet
+from django.db.models.manager import BaseManager
 cyrillic_letters = {
     u'а': u'a',
     u'б': u'b',
@@ -46,4 +48,6 @@ def from_cyrilic_to_eng(text: str):
 
 
 def get_object_or_null(model, **kwargs):
+    if isinstance(model, QuerySet) or isinstance(model, BaseManager):
+        return model.filter(**kwargs).first()
     return model.objects.filter(**kwargs).first()

@@ -98,6 +98,21 @@ class UpdateUserForm(forms.ModelForm):
         fields = ('city', 'language', 'mailing',)
 
 
-    
+
+
+
+class ContactForm(forms.Form):
+
+    city = forms.CharField(required=True,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}),
+                           label='Город')
+    language = forms.CharField(required=True,
+                               widget=forms.TextInput(attrs={'class': 'form-control',}),
+                               label='Язык программирования')
+    email = forms.CharField(required=True,
+                            widget=forms.EmailInput(attrs={'class': 'form-control',}),
+                            label='Ваш email')
+
+
         
 # фукнция check_password - шифрует пароль (возможно хеширует), и проверяет равен ли паролю, полученному у пользователя

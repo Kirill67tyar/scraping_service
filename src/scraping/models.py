@@ -16,6 +16,10 @@ def get_default_urls():
             'dou':'',
             'djinni':'',}
 
+def get_default_data_errors():
+    return {'errors': [],
+            'feedback': [],}
+
 
 class City(Model):
 
@@ -83,11 +87,12 @@ class Vacancy(Model):
 class Error(Model):
 
     timestamp = DateTimeField(auto_now_add=True)
-    data = jsonfield.JSONField()
+    datestamp = DateField(auto_now_add=True)
+    data = jsonfield.JSONField()# default=get_default_data_errors
 
 
     def __str__(self):
-        return str(self.timestamp)
+        return str(self.datestamp)
 
     class Meta:
         verbose_name = 'Ошибка'
@@ -100,6 +105,9 @@ class Url(Model):
     city = ForeignKey('City', on_delete=CASCADE, verbose_name='Город')
     language = ForeignKey('Language', on_delete=CASCADE, verbose_name='Язык программирования')
     url_data = jsonfield.JSONField(default=get_default_urls)
+
+    def __str__(self):
+        return str(((self.city.name, self.city.pk), (self.language.name, self.language.pk,)))
 
     class Meta:
 

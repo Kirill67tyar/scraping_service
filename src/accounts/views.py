@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib import messages
-from accounts.forms import LoginUserForm, RegistrationUserForm, UpdateUserForm
+from accounts.forms import LoginUserForm, RegistrationUserForm, UpdateUserForm, ContactForm
 from scraping.utils import get_object_or_null
+from scraping.models import Error
+from datetime import date
 
 User = get_user_model()
 
@@ -79,3 +81,28 @@ def delete_view(request):
             messages.info(request, 'Удаление прошло успешно')
     return redirect('accounts:registration')
 
+
+def contact_view(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                feedback = [{'city': data.get('city'),
+                            'language': data.get('language'),
+                            'email': data.get('email')},]
+                today = date.today()
+                err = get_object_or_null(Error, datestamp=today)
+                if err:
+                    err.data['feedback'].extend(feedback)
+                    err.save()
+                else:
+                    Error.objects.create(data={'errors': [], 'feedback': feedback,})
+                messages.info(request, 'Данные отправлены нашей администрации')
+                return redirect(reverse('scraping:home'))
+
+
+        elif request.method == 'GET':
+            form = ContactForm()
+        return render(request, 'accounts/contact.html', context={'form': form,})
+    return redirect('accounts:registration')

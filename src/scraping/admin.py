@@ -13,8 +13,8 @@ class VacancyAdmin(admin.ModelAdmin):
 
 class ErrorAdmin(admin.ModelAdmin):
 
-    fields = ('timestamp', 'data',)
-    readonly_fields = ('timestamp',)# 'data',)
+    fields = ('timestamp', 'datestamp', 'data',)
+    readonly_fields = ('timestamp', 'datestamp',)
 
 
 

@@ -28,3 +28,6 @@ class ExperimentSearchForm(forms.Form):
     main_field = forms.CharField(required=False,
                                  label="Эксперимент",
                                  widget=forms.TextInput(attrs={'name': 'anything'}))
+
+
+

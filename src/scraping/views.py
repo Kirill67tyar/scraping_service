@@ -59,7 +59,7 @@ def list_view(request):
             _filter["city__slug"] = city
         if language:
             _filter["language__slug"] = language
-        page_obj = Vacancy.objects.filter(**_filter)#, timestamp__gte=timestamp)
+        page_obj = Vacancy.objects.filter(**_filter, timestamp__gte=timestamp)
     count = len(page_obj)
     report = f'{f"По Вашему запросу найдено {count} вакансия(ий)" if count else "По вашему запросу нет вакансий"}'
     paginator = Paginator(page_obj, 10)

@@ -39,15 +39,19 @@
 <div class="row">
     <div class="col-md-6 mx-auto">
         <div class="box">
-            <a class="btn btn-danger" href="#popup1">Удалить</a>
+            <a class="btn btn-danger" href="#popup1">Удалить данные</a>
         </div>
     </div>
 </div>
+<figure class="text-center">
+    <p>Не нашли нужный вам город или язык программирования? Можете
+        <a href="{% url 'accounts:contact' %}">сообщить нам,</a> мы добавим их в список.</p>
+</figure>
 <!------------------------------------------------------------------------------->
 <div id="popup1" class="overlay">
     <div class="popup">
         <h2>Вы действительно хотите удалить данные с сайта?</h2>
-<!--        <a class="close" href="#">&times;</a>-->
+        <!--        <a class="close" href="#">&times;</a>-->
         <div class="content">
 
 
