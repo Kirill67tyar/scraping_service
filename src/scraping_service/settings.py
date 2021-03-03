@@ -108,6 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'accounts.MyUser'
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -123,20 +126,25 @@ USE_L10N = True
 USE_TZ = True
 
 
+# -------------------------------------------------------- static settings
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
+# здесь мы указываем куда django будет собирать всю статику проекта при команде collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# здесь мы указываем откуда будем доставать статику и подключать к шаблону, с помощью тега {% static 'css/style.css' %}
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'scraping_service/static'),
 ]
+# -------------------------------------------------------- static settings
 
-AUTH_USER_MODEL = 'accounts.MyUser'
 
 
+
+# -------------------------------------------------------- email settings
 #DataFlair
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -144,3 +152,4 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+# -------------------------------------------------------- email settings

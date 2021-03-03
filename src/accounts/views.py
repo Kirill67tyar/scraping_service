@@ -67,7 +67,8 @@ def update_view(request):
             form = UpdateUserForm(initial={'city': user.city, 
                                            'language': user.language,
                                            'mailing': user.mailing,})
-            return render(request, 'accounts/update_user.html', {'form': form,})
+            contact_form = ContactForm()
+            return render(request, 'accounts/update_user.html', {'form': form, 'contact_form': contact_form,})
         
     else:
         return redirect(reverse('accounts:login'))

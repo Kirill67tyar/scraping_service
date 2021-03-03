@@ -24,17 +24,6 @@
     </div>
 </div>
 
-<!--<div class="row">-->
-<!--    <div class="col-md-6 mx-auto">-->
-<!--        <form action="{# url 'accounts:delete' #}" method="GET">-->
-
-<!--            <div class="form-group">-->
-
-<!--                <button type="submit" class="btn btn-danger my-3">Удалить пользователя</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
 
 <div class="row">
     <div class="col-md-6 mx-auto">
@@ -44,9 +33,31 @@
     </div>
 </div>
 <figure class="text-center">
-    <p>Не нашли нужный вам город или язык программирования? Можете
-        <a href="{% url 'accounts:contact' %}">сообщить нам,</a> мы добавим их в список.</p>
+    <p>Не нашли нужный вам город или язык программирования?
+        Можете
+        <a data-bs-toggle="collapse" href="#collapsed" role="button" aria-expanded="false"
+           aria-controls="collapsed">
+            сообщить нам,
+        </a>
+        мы добавим их в список.
+    </p>
 </figure>
+<div class="collapse col-md-6 mx-auto" id="collapsed">
+
+            <form action="{% url 'accounts:contact' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{contact_form.as_p}}
+                    <button type="submit" class="btn btn-primary">Отправить нам</button>
+                </div>
+            </form>
+    <br>
+
+</div>
+<!--<figure class="text-center">-->
+<!--    <p>Не нашли нужный вам город или язык программирования? Можете-->
+<!--        <a href="{# url 'accounts:contact' #}">сообщить нам,</a> мы добавим их в список.</p>-->
+<!--</figure>-->
 <!------------------------------------------------------------------------------->
 <div id="popup1" class="overlay">
     <div class="popup">
