@@ -83,3 +83,54 @@ h1 {
     width: 70%;
   }
 }
+
+
+/* colors 
+	color: #114;
+	color: #005;
+    color: #502; 
+    color: #412; 
+    color: #50A; 
+*/
+
+/*----------------- first font --------------*/
+/*@font-face {
+    font-family: ChakraPetch;
+    src: url(../fonts/Chakra_Petch/ChakraPetch-SemiBold.ttf);
+}*/
+
+/*#brand {
+    font-family: ChakraPetch;
+    color: #005; 
+}
+*/
+/*----------------- first font --------------*/
+
+
+
+
+/*----------------- another experiments fonts --------------*/
+@font-face {
+    font-family: ka1;
+    src: url(../fonts/karmatic-arcade/ka1.ttf);
+}
+
+#brand {
+    font-family: ka1;
+    color: #005; 
+
+}
+/*----------------- another experiments fonts --------------*/
+
+
+
+/*
+file - arcadeclassic
+font - ARCADECLASSIC
+
+file - lazer84
+font - Lazer84
+
+karmatic-arcade
+ka1
+*/
