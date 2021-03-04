@@ -23,7 +23,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
 ]
 
-# lesson start 9-1 (84)
+# lesson start 10-1 (86)
 
 
 

@@ -33,7 +33,7 @@
 <figure class="text-center">
     <div class="row">
         <div class="col">
-            <h2 class="my-3">Сервис по сбору и рассылке вакансий</h2>
+            <h4 class="my-3">Сервис по сбору и рассылке вакансий</h4>
         </div>
     </div>
 </figure>
@@ -51,8 +51,11 @@
         <form action="{% url 'scraping:vacancy_list' %}" method="GET">
             <div class="form-group">
                 {{form.as_p}}
-                <div class="d-grid gap-2 col-6 mx-auto">
-                    <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-2x" aria-hidden="true"></i>&nbsp;</button>
+
+                <div class="d-grid gap-2 col-4 mx-auto">
+<!--                    <input class="btn btn-primary" type="submit" value="search" id="search"-->
+<!--                           style="background-color: #114;">-->
+                    <input class="button-5" type="submit"  value="search" id="search">
                 </div>
             </div>
         </form>

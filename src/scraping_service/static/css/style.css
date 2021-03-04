@@ -14,6 +14,9 @@ h1 {
   margin: 80px 0;
 }
 
+.button {
+    background-color: #114;
+}
 .box {
   width: 40%;
   margin: 0 auto;
@@ -117,11 +120,39 @@ h1 {
 
 #brand {
     font-family: ka1;
-    color: #005; 
+    color: #abffab; /*005 abffab FFF*/
+    font-size: 26px;
 
 }
+
+
+
+#search {
+font-family: ka1;
+    color: #110821; /*005 abffab FFF*/
+    font-size: 22px;
+}
+
+
+
 /*----------------- another experiments fonts --------------*/
 
+@font-face {
+    font-family: IBMPlexMono;
+    src: url(../fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf);
+}
+
+#btext {
+	font-family: IBMPlexMono;
+    color: #292929; /*005 abffab FFF*/
+    font-size: 25px;
+
+}
+
+@font-face {
+    font-family: ChakraPetch;
+    src: url(../fonts/Chakra_Petch/ChakraPetch-Regular.ttf);
+}
 
 
 /*
@@ -133,4 +164,217 @@ font - Lazer84
 
 karmatic-arcade
 ka1
+
+pixel-icons-compilation
+Pixel Icons Compilation
+
+IBM_Plex_Mono
+IBMPlexMono-Regular
 */
+
+
+
+/* colors 
+	color: #114;
+	color: #214;
+	color: #005;
+    color: #502; 
+    color: #412; 
+    color: #50A;
+    #412
+    #414
+*/
+
+
+
+/* beatiful button */
+.button-5 {
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    padding: 15px 30px;
+    color: #766AD0;
+    border: 1px solid #3A374C;
+    /*font-size: 14px;*/
+    /*font-weight: 700;*/
+    white-space: nowrap;
+    transition: .3s linear;
+    background-color: #abffab;
+}
+.button-5:before, .button-5:after, .link-content:before, .link-content:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    width: 15px;
+    height: 15px;
+    transition: .3s linear;
+}
+.button-5:before {
+    left: -20px;
+    top: -20px;
+    border-left: 20px solid #114;
+    border-top: 20px solid #114;
+}
+/*614DFF*/
+.button-5:after {
+    bottom: -20px;
+    right: -20px;
+    border-bottom: 20px solid #114;
+    border-right: 20px solid #114;
+}
+.link-content:after {
+    right: -20px;
+    top: -20px;
+    border-right: 20px solid #114;
+    border-top: 20px solid #114;
+}
+.link-content:before {
+    left: -20px;
+    bottom: -20px;
+    border-bottom: 20px solid #114;
+    border-left: 20px solid #114;
+}
+.button-5:hover {
+    color: #FFF;
+    border-color: #FFF;
+}
+
+
+
+
+
+
+/*select-css*/
+.select-css { 
+display: block; 
+font-size: 16px; 
+font-family: sans-serif; 
+font-weight: 700; 
+color: #444; 
+line-height: 1.3; 
+padding: .6em 1.4em .5em .8em; width: 100%; 
+max-width: 100%; 
+box-sizing: border-box; 
+margin: 0; 
+border: 1px solid #aaa;
+ box-shadow: 0 1px 0 1px rgba(0,0,0,.04); 
+border-radius: .5em;
+ -moz-appearance: none;
+ -webkit-appearance: none;
+ appearance: none;
+ background-color: #fff; 
+background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'), linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); 
+background-repeat: no-repeat, repeat;
+background-position: right .7em top 50%, 0 0;
+background-size: .65em auto, 100%; 
+} 
+ .select-css::-ms-expand { display: none; } 
+ .select-css:hover { border-color: #888; } 
+ .select-css:focus { border-color: #aaa; 
+ box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+ box-shadow: 0 0 0 3px -moz-mac-focusring; 
+color: #222;
+ outline: none; 
+} 
+ .select-css option { font-weight:normal; } 
+ *[dir="rtl"] .select-css, :root:lang(ar) .select-css, :root:lang(iw) .select-css { 
+background-position: left .7em top 50%, 0 0; 
+padding: .6em .8em .5em 1.4em; 
+}
+
+
+
+
+
+/* --------------------------Beatiful pagination-------------------------*/
+.paginationn {
+    width: 100%;
+    text-align: center;
+}
+
+.paginationn ul {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.paginationn ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 3px 3px;
+/*    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;*/
+
+    /*font-family: ka1;*/
+    font-family: ChakraPetch;
+    color: #abffab; /*005 abffab FFF*/
+    font-size: 12pt;
+}
+
+.paginationn ul li a,
+.paginationn ul li a:visited {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.paginationn ul li a:hover {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+
+/***** Черный *****/
+
+.paginationn ul li a:link.blacksquare,
+.paginationn ul li a:visited.blacksquare {
+    border: 1px solid #114;
+    background: #114;
+    background: -moz-linear-gradient(top, #36004a, #114);
+    background: -ms-linear-gradient(top, #36004a, #114);
+    background: -webkit-gradient(linear, left top, left bottom, from(#36004a), to(#114));
+    background: -o-linear-gradient(#36004a, #114);
+    filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr='#36004a', EndColorStr='#000', GradientType=0);
+    color: #abffab;
+    text-shadow: none !important;
+}
+
+.paginationn ul li a:hover.blacksquare {
+    border: 1px solid #114;
+    background: #7c7c7c;
+    background: -moz-linear-gradient(top, #7c7c7c, #114);
+    background: -ms-linear-gradient(top, #7c7c7c, #114);
+    background: -webkit-gradient(linear, left top, left bottom, from(#7c7c7c), to(#114));
+    background: -o-linear-gradient(top, #7c7c7c, #114);
+    filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr='#7c7c7c', EndColorStr='#114', GradientType=0);
+    color: #abffab;
+    text-shadow: none !important;
+}
+
+.paginationn ul li a:link.blacksquareactive,
+.paginationn ul li a:visited.blacksquareactive {
+    border: 1px solid #114;
+    background: #7c7c7c;
+    background: -moz-linear-gradient(top, #7c7c7c, #114);
+    background: -ms-linear-gradient(top, #7c7c7c, #114);
+    background: -webkit-gradient(linear, left top, left bottom, from(#7c7c7c), to(#114));
+    background: -o-linear-gradient(top, #7c7c7c, #114);
+    filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr='#7c7c7c', EndColorStr='#114', GradientType=0);
+    color: #abffab;
+    text-shadow: none !important;
+}
+
+.paginationn ul li a:hover.blacksquareactive {
+    border: 1px solid #114;
+    background: #114;
+    background: -moz-linear-gradient(top, #3f3f3f, #114);
+    background: -ms-linear-gradient(top, #3f3f3f, #114);
+    background: -webkit-gradient(linear, left top, left bottom, from(#3f3f3f), to(#114));
+    background: -o-linear-gradient(top, #3f3f3f, #114);
+    filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr='#3f3f3f', EndColorStr='#114', GradientType=0);
+    color: #abffab;
+    text-shadow: none !important;
+}
+
+

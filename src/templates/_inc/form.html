@@ -3,7 +3,9 @@
         <form action="{% url 'scraping:vacancy_list' %}" method="GET">
             <div class="form-group">
                 {{form.as_p}}
-                <button type="submit" class="btn btn-primary">Искать</button>
+                <div class="d-grid gap-2 col-4 mx-auto">
+                    <input class="button-5" type="submit" value="search" id="search">
+                </div>
             </div>
         </form>
     </div>

@@ -10,7 +10,7 @@ class SearchForm(forms.Form):
         queryset=City.objects.all(),
         to_field_name='slug',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-select form-select-lg mb-3',}),
+        widget=forms.Select(attrs={'class': 'select-css',}),
         label='Город'
     )
 
@@ -18,7 +18,7 @@ class SearchForm(forms.Form):
         queryset=Language.objects.all(),
         to_field_name='slug',
         required=False,
-        widget=forms.Select(attrs={'class': 'form-select form-select-lg mb-3',}),
+        widget=forms.Select(attrs={'class': 'select-css',}),
         label='Язык программирования'
     )
 
