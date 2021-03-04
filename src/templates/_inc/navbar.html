@@ -1,3 +1,7 @@
+{% url 'accounts:contact' as contact_url %}
+{% url 'accounts:update' as update_url %}
+{% url 'accounts:login' as login_url %}
+{% url 'accounts:registration' as registration_url %}
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #114; border-radius: 15px;">
         <!--bg-light    style="background-color: #a46fa8;"  114  214-->
@@ -16,29 +20,18 @@
                     {% if user.is_authenticated %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:contact' %}">
+                        <a class="nav-link {% if request.path == contact_url %} active {% endif %} " href="{% url 'accounts:contact' %}">
                             &nbsp;<i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;Обратная связь</a>
                     </li>
 
 
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="%">-->
-<!--                            |-->
-<!--                        </a>-->
-<!--                    </li>-->
-
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:update' %}">
+                        <a class="nav-link {% if request.path == update_url %} active {% endif %} " href="{% url 'accounts:update' %}">
                             &nbsp;<i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;Настройки</a>
                     </li>
 
 
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="#">-->
-<!--                            |-->
-<!--                        </a>-->
-<!--                    </li>-->
 
 
                     <li class="nav-item">
@@ -47,18 +40,16 @@
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        &nbsp;<a class="nav-link" href="{% url 'accounts:registration' %}">
+                        <a class="nav-link {% if request.path == registration_url %} active {% endif %} " href="{% url 'accounts:registration' %}">
+                        <i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;
+
                             Зарегистрироваться
                         </a>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" href="#">-->
-<!--                            |-->
-<!--                        </a>-->
-<!--                    </li>-->
+
 
                     <li class="nav-item">
-                        &nbsp;<a class="nav-link" href="{% url 'accounts:login' %}">
+                        <a class="nav-link {% if request.path == login_url %} active {% endif %} " href="{% url 'accounts:login' %}">
                             <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Войти
                         </a>
                     </li>
