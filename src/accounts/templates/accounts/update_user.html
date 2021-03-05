@@ -27,11 +27,13 @@
 
 <div class="row">
     <div class="col-md-6 mx-auto">
-        <div class="box">
-            <a class="btn btn-danger" href="#popup1">Удалить данные</a>
-        </div>
+        <br>
+
+        <a class="btn btn-danger" href="#popup1">Удалить данные</a>
+
     </div>
 </div>
+<br>
 <figure class="text-center">
     <p>Не нашли нужный вам город или язык программирования?
         Можете
@@ -44,13 +46,13 @@
 </figure>
 <div class="collapse col-md-6 mx-auto" id="collapsed">
 
-            <form action="{% url 'accounts:contact' %}" method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    {{contact_form.as_p}}
-                    <button type="submit" class="btn btn-primary" style="background-color: #114;">Отправить нам</button>
-                </div>
-            </form>
+    <form action="{% url 'accounts:contact' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {{contact_form.as_p}}
+            <button type="submit" class="btn btn-primary" style="background-color: #114;">Отправить нам</button>
+        </div>
+    </form>
     <br>
 
 </div>

@@ -5,14 +5,12 @@
 {% block content %}
 
 
-
 <!--<div class="row">-->
 <!--    <div class="col-md-7 mx-auto">-->
 <div class="row justify-content-md-center">
     <p class="h4">{{report}}</p>
 </div>
 <!--</div>-->
-
 
 
 <br>
@@ -25,7 +23,7 @@
 {% for obj in page_obj %}
 <div class="card my-3">
     <div class="card-header">
-        <h5 class="card-title"><a href="{{obj.url}}" target="_blank">{{obj.title}}</a></h5>
+        <h5 class="card-title"><a href="{{obj.url}}" target="_blank" style="color: #104;">{{obj.title}}</a></h5>
     </div>
     <div class="card-body">
         <p class="lead">
