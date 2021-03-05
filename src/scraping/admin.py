@@ -6,8 +6,8 @@ from scraping.models import City, Language, Vacancy, Error, Url
 
 class VacancyAdmin(admin.ModelAdmin):
 
-    fields = ('url', 'title', 'company', 'description', 'city', 'language', 'timestamp',)
-    readonly_fields = ('timestamp',)
+    fields = ('pk', 'url', 'title', 'company', 'description', 'city', 'language', 'timestamp',)
+    readonly_fields = ('timestamp', 'pk',)
 
 
 
