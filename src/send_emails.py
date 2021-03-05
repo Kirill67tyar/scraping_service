@@ -76,11 +76,11 @@ if users_dict:
                 html += f'<p>{row["company"]}</p>'
                 html += f'<p>{str(row["timestamp"])}</p><br><hr>'
         html_content = html if html else empty
-        # for email in emails:
-        #     to = email
-        #     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        #     msg.attach_alternative(html_content, "text/html")
-        #     msg.send()
+        for email in emails:
+            to = email
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
 
 
 error = get_object_or_null(Error, datestamp=today)
@@ -148,17 +148,14 @@ if keys_without_urls:
 # ========================================================== Ищем пары город-язык к которым нет urls (FINISH)
 
 # ------------ Посылаем письмо админу ------------
-# if subject:
-#     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-#     msg.attach_alternative(html_content, "text/html")
-#     msg.send()
+if subject:
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
 
-with open('to_admin.html', 'w') as p:
-    p.write(html_content)
-
-
-
+# with open('to_admin.html', 'w') as p:
+#     p.write(html_content)
 
 
 
@@ -172,11 +169,5 @@ with open('to_admin.html', 'w') as p:
 
 
 
-"""
-subject, from_email, to = 'hello', 'from@example.com', 'to@example.com'
-text_content = 'This is an important message.'
-html_content = '<p>This is an <strong>important</strong> message.</p>'
-msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-msg.attach_alternative(html_content, "text/html")
-msg.send()
-"""
+
+
