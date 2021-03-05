@@ -19,7 +19,8 @@ from django.urls import (path, include,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('job-search/', include('scraping.urls', namespace='scraping')),
+    # path('job-search/', include('scraping.urls', namespace='scraping')),
+    path('', include('scraping.urls', namespace='scraping')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
 ]
 
